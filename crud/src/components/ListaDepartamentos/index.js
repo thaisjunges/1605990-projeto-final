@@ -1,6 +1,21 @@
-import React from 'react';
+import React, { useEffect, useState} from 'react';
+import getDepartamentos from '../../services/departamentos';
 
 const ListaDepartamentos = () => {
+  const [departamentos, setDepartamentos] = useState()
+
+  async function loadDepartamentos() {
+    //valor que venho da API = getdepartamentos
+    setDepartamentos(await getDepartamentos())
+  }
+
+  useEffect(() => {
+    loadDepartamentos()
+  }, [])
+
+
+  //const departamentos = getDepartamentos()
+  //console.log(departamentos)
 
     return (
         <>
@@ -16,11 +31,12 @@ const ListaDepartamentos = () => {
           </thead>
          
           <tbody>
-            <tr>
-              <td>Recursos Humanos</td>
-              <td>RH</td>
+            {departamentos && departamentos.map(d => {
+              return (
+            <tr key={d.id_departamento}>
+              <td>{d.nome}</td>
+              <td>{d.sigla}</td>
               <td>
-
                 <div className='d-flex justify-content-evenly'>
                 <button className='btn btn-outline-warning btn-sm'>
                     <i className='bi bi-pencil-fill btn-sm'/> Editar</button>
@@ -30,6 +46,8 @@ const ListaDepartamentos = () => {
 
               </td>
             </tr>
+            )
+            })}
           </tbody>
           </table>
           </>

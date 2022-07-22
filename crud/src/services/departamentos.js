@@ -5,3 +5,5 @@ const getDepartamentos = async () => {
     return resp.data
 }
 
+export default getDepartamentos;
+
