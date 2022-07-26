@@ -1,5 +1,6 @@
 import React, { useEffect, useState} from 'react';
 import getDepartamentos from '../../services/departamentos';
+import { Link } from "react-router-dom"
 
 const ListaDepartamentos = () => {
   const [departamentos, setDepartamentos] = useState()
@@ -19,17 +20,25 @@ const ListaDepartamentos = () => {
 
     return (
         <>
-        <h3 className='mt-3'>Departamentos</h3>
+        <div className='d-flex justify-content-between '>
+          <h3 className='mt-3'>Departamentos</h3>
+
+        <Link 
+        className="btn btn-primary mt-3"
+        to='/departamentos/new'>
+        <i className='bi bi-plus'/> NOVO
+        </Link>
+        </div>
+        
 
         <table className='table table-striped'>
           <thead>
             <tr>
             <th>Nome</th>
             <th>Sigla</th>
-            <th>Ações</th>
+            <th className='text-center'>Ações</th>
             </tr>
           </thead>
-         
           <tbody>
             {departamentos && departamentos.map(d => {
               return (

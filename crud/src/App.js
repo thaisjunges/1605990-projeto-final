@@ -5,6 +5,7 @@ import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import Menu from './components/Menu'
 import Home from './components/Home';
 import ListaDepartamentos from './components/ListaDepartamentos';
+import FormDepartamentos from './components/FormDepartamentos';
 
 
 
@@ -17,6 +18,7 @@ function App() {
         <Routes>
           <Route path='/' element={<Home />}/>
           <Route path='/departamentos' element={<ListaDepartamentos />}/>
+          <Route path='departamentos/new' element={<FormDepartamentos />}/>
         </Routes>
       </div>
       </BrowserRouter>
