@@ -1,8 +1,15 @@
 import React, { useEffect, useState} from "react";
+import { useNavigate } from "react-router-dom";
+import { insertDepartamento } from "../../services/departamentos";
+
 
 const FormDepartamentos = () => {
     const [nome, setNome] = useState('');
     const [sigla, setSigla] = useState('');
+    const [showError, setShowError] = useState('d-none');
+    const [error, setError] = useState('d-none');
+
+    const navigate = useNavigate()
 
     return (
         <>
@@ -49,12 +56,37 @@ const FormDepartamentos = () => {
                 <div className='col'>
                     <button 
                     className='btn btn-primary mt-3'
-                    onClick={() => {
-                        alert('Clicou')
+                        onClick={() => {
+                            setShowError('d-none');
+
+                            if (nome == '') {
+                                //vai dar problema!
+                                setShowError('d-block');
+                                setError('Preencha o nome');
+                                return;
+                            }
+
+                            //implemente a validação da sigla
+                            if (sigla == '') {
+                                setShowError('d-block');
+                                setError('Preencha a sigla');
+                                return;
+                            }
+                            
+                            ///aqui vamos chamar nossa API
+                            insertDepartamento({
+                                nome,
+                                sigla
+                            })
+
+                            navigate('/departamentos');
                     }}>
                     <i class="bi bi-box-arrow-down" />Salvar
                     </button>
                 </div>
+            </div>
+            <div className={`alert alert-danger mt-3 ${showError}`}>
+                {error}
             </div>
         </>
     )

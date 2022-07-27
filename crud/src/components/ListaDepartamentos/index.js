@@ -1,6 +1,7 @@
 import React, { useEffect, useState} from 'react';
-import getDepartamentos from '../../services/departamentos';
+import {getDepartamentos} from '../../services/departamentos';
 import { Link } from "react-router-dom"
+
 
 const ListaDepartamentos = () => {
   const [departamentos, setDepartamentos] = useState()
@@ -40,6 +41,18 @@ const ListaDepartamentos = () => {
             </tr>
           </thead>
           <tbody>
+
+        {!departamentos &&
+          <tr>
+            <td colSpan='3'>
+              <div className='d-flex justify-content-center'>
+                <div className='spinner-border text-warning'>
+                  <span className='visually-hidden'>Loading...</span>
+                </div>
+              </div>
+            </td>
+          </tr>
+}
             {departamentos && departamentos.map(d => {
               return (
             <tr key={d.id_departamento}>
