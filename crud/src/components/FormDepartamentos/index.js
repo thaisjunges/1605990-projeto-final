@@ -1,19 +1,49 @@
 import React, { useEffect, useState} from "react";
-import { useNavigate } from "react-router-dom";
-import { insertDepartamento } from "../../services/departamentos";
+import { useNavigate, useParams } from "react-router-dom";
+import { 
+    insertDepartamento, 
+    getDepartamentoById, 
+    updateDepartamento
+} from "../../services/departamentos";
 
 
 const FormDepartamentos = () => {
+    const { idDepartamento } = useParams();
+    const [departamento, setDepartamento] = useState();
     const [nome, setNome] = useState('');
     const [sigla, setSigla] = useState('');
     const [showError, setShowError] = useState('d-none');
     const [error, setError] = useState('d-none');
 
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+
+    const titulo = idDepartamento ? 'Atualização' : 'Cadastro';
+
+
+    //Caso seja uma ediçção de departamento
+    //Não podemos chamr um async dentro do useEffect, por isso criamos uma função FORA dele
+    async function getDepto(idDepartamento) {
+        setDepartamento(await getDepartamentoById(idDepartamento));
+      }
+    
+      useEffect(() => {
+        if (idDepartamento) {
+          getDepto(idDepartamento)
+        }
+      }, [])
+    
+      useEffect(() => {
+        if(departamento) {
+          setNome(departamento[0].nome);
+          setSigla(departamento[0].sigla);
+        }
+      },[departamento])
+
+
 
     return (
         <>
-            <h3 className='mt-3 mb-3'>Cadastro de Departamento</h3>
+            <h3 className='mt-3 mb-3'>{titulo} de Departamento</h3>
 
             <div className="row">
 
@@ -74,10 +104,21 @@ const FormDepartamentos = () => {
                             }
                             
                             ///aqui vamos chamar nossa API
-                            insertDepartamento({
+                            if (departamento) {
+                                // se o state estiver preenchido então é uma EDIÇÃO
+                               updateDepartamento({ 
+                                idDepartamento,
                                 nome,
                                 sigla
-                            })
+                            });
+
+                            } else {
+                                //se o state estiver vazio/nulo então é uma INSERÇÃO
+                                insertDepartamento({
+                                    nome,
+                                    sigla
+                                });
+                            }
 
                             navigate('/departamentos');
                     }}>

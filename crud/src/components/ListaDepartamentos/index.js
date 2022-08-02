@@ -1,10 +1,11 @@
 import React, { useEffect, useState} from 'react';
-import {getDepartamentos} from '../../services/departamentos';
-import { Link } from "react-router-dom"
+import {getDepartamentos, removeDepartamento} from '../../services/departamentos';
+import { Link, useSearchParams } from "react-router-dom"
 
 
 const ListaDepartamentos = () => {
   const [departamentos, setDepartamentos] = useState()
+  const [excluindo, setExcluindo] = useState();
 
   async function loadDepartamentos() {
     //valor que venho da API = getdepartamentos
@@ -15,9 +16,10 @@ const ListaDepartamentos = () => {
     loadDepartamentos()
   }, [])
 
+  useEffect(( ) => {
+    setExcluindo(false);
+  }, [departamentos])
 
-  //const departamentos = getDepartamentos()
-  //console.log(departamentos)
 
     return (
         <>
@@ -60,10 +62,52 @@ const ListaDepartamentos = () => {
               <td>{d.sigla}</td>
               <td>
                 <div className='d-flex justify-content-evenly'>
-                <button className='btn btn-outline-warning btn-sm'>
-                    <i className='bi bi-pencil-fill btn-sm'/> Editar</button>
-                <button className='btn btn-outline-danger'>
-                    <i className='bi bi-trash-fill'/> Excluir</button>
+                
+                
+                
+                <Link 
+                className='btn btn-outline-warning btn-sm'
+                  to={`/departamentos/edit/${d.id_departamento}`}
+                  >
+                    <i className='bi bi-pencil-fill btn-sm'/> Editar
+                    </Link>
+
+
+
+                <button 
+                disabled={excluindo}
+                className='btn btn-outline-danger'
+
+                onClick={() => {
+
+                setExcluindo(true);
+
+                 removeDepartamento({
+                    idDepartamento: d.id_departamento,
+                    callback: (resposta) => {
+                      loadDepartamentos()
+                     
+                      if (resposta == '') {
+                        alert('Não foi possivel excluir')
+                      }
+                    }
+                  })
+
+                }}
+                >
+                  {excluindo &&
+                    <span className='spinner-border spinner-border-sm'/>
+                  }
+
+                  {!excluindo &&
+                    <i className='bi bi-trash3-fill'/>
+                  }
+                    
+                    
+                    {' '} Excluir
+                    
+                    
+                    </button>
                 </div>
 
               </td>
